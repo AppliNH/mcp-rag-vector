@@ -1,0 +1,40 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binaries
+*.test
+
+# Go coverage
+*.out
+
+# Build directories
+bin/
+build/
+dist/
+
+# Go workspace stuff
+*.log
+*.cache/
+*.tmp/
+
+# Dependency directories (if you vendor)
+vendor/
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS/Linux system files
+.DS_Store
+Thumbs.db
+
+# Environment/config
+.env
+.env.*

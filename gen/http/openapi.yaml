@@ -1,0 +1,49 @@
+swagger: "2.0"
+info:
+    title: MCP server to serve as a RAG pipeline by allowing an LLM to write and read in a vector DB. API
+    description: A simple API for MCP server to serve as a RAG pipeline by allowing an LLM to write and read in a vector DB.
+    version: "1.0"
+host: localhost:80
+consumes:
+    - application/json
+    - application/xml
+    - application/gob
+produces:
+    - application/json
+    - application/xml
+    - application/gob
+paths:
+    /checks/health:
+        get:
+            tags:
+                - health
+            summary: getHealth health
+            description: Returns OK if the service is healthy
+            operationId: health#getHealth
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        $ref: '#/definitions/HealthCheckResponse'
+                        required:
+                            - healthy
+            schemes:
+                - http
+definitions:
+    HealthCheckResponse:
+        title: HealthCheckResponse
+        type: object
+        properties:
+            healthy:
+                type: boolean
+                description: health or not
+                example: true
+            message:
+                type: string
+                description: health message
+                example: MCP RAG Vector API is healthy
+        example:
+            healthy: true
+            message: MCP RAG Vector API is healthy
+        required:
+            - healthy

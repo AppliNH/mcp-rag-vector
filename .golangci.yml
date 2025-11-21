@@ -1,0 +1,52 @@
+run:
+  timeout: 5m
+  modules-download-mode: readonly
+
+linters:
+  enable:
+    - govet
+    - errcheck
+    - staticcheck
+    - unused
+    - gosimple
+    - ineffassign
+    - typecheck
+    - gofmt
+    - goimports
+    - goconst
+    - unconvert
+    - gosec
+    - gocyclo
+    - dupl
+    - prealloc
+    - copyloopvar
+
+linters-settings:
+  gocyclo:
+    min-complexity: 15
+
+  gosec:
+    excludes:
+      - G404 # Use of weak random number generator
+
+  dupl:
+    threshold: 100
+
+issues:
+  exclude-use-default: false
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gosec
+        - dupl
+        - errcheck
+    - text: "Error return value of.*logger.Log.* is not checked"
+      linters:
+        - errcheck
+    - text: "Error return value of.*Log.* is not checked"
+      linters:
+        - errcheck
+    - text: "G104: Errors unhandled"
+      source: "logger.Log"
+      linters:
+        - gosec

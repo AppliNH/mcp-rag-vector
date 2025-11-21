@@ -1,0 +1,29 @@
+module_name:
+    type: str
+    help: What is your Golang module name?
+api_name:
+    type: str
+    help: What is your API name?
+api_description:
+    type: str
+    help: What is your API description?
+docker_image_name:
+    type: str
+    help: What is your Docker image name (format username/repo)?
+go_version:
+    type: str
+    help: What Go version do you want to use? (e.g., 1.25 or 1.24)
+    default: "1.25"
+
+_exclude:
+    - .github/workflows/_*.yml
+    - CHANGELOG.md
+    - README.md
+    - .git
+
+_tasks:
+  - make install-dev-tools
+  - make generate-code-design
+  - make download-deps
+  - make tidy
+
