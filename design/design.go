@@ -34,5 +34,18 @@ var _ = Service("health", func() {
 			Response(StatusOK)
 		})
 	})
+})
 
+// Greeting service
+var _ = Service("greeting", func() {
+	Description("Greeting service")
+
+	Method("greet", func() {
+		Description("Returns a greeting for the given name")
+		Payload(func() {
+			Field(1, "name", String, "Name to greet")
+			Required("name")
+		})
+		Result(String)
+	})
 })

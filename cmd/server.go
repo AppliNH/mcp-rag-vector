@@ -1,10 +1,13 @@
 package cmd
 
 import (
+	stdhttp "net/http"
 	"sync"
 
 	"github.com/applinh/mcp-rag-vector/cmd/services"
-	"github.com/applinh/mcp-rag-vector/internal/infra/http"
+	infrahttp "github.com/applinh/mcp-rag-vector/internal/infra/http"
+
+	"github.com/mark3labs/mcp-go/server"
 
 	"github.com/spf13/cobra"
 
@@ -23,7 +26,21 @@ var serverCmd = &cobra.Command{
 		mux := goahttp.NewMuxer()
 		services.MountHealthService(ctx, mux, cfg)
 
-		http.ServeHTTP(mux, ctx, cfg, &wg, errc)
+		mcpSrv := mcpInit(ctx, cfg)
+
+		// Use the MCP HTTP handler from mcp-go
+		// Mount the SSE server under /mcp so endpoints become
+		// /mcp/sse and /mcp/message
+		mcpHandler := server.NewSSEServer(mcpSrv, server.WithStaticBasePath("/mcp"))
+
+		// Mount MCP handler under /mcp and combine with existing goa mux
+		finalHandler := infrahttp.CombineHandlers(mcpHandler, mux)
+
+		// mount main handler under a small ServeMux
+		top := stdhttp.NewServeMux()
+		top.Handle("/", finalHandler)
+
+		infrahttp.ServeHTTP(top, ctx, cfg, &wg, errc)
 		for {
 			if err := <-errc; err != nil {
 				panic(err)
@@ -36,7 +53,7 @@ var serverCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(serverCmd)
-
+	rootCmd.AddCommand(mcpCmd)
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

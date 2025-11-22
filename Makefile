@@ -38,11 +38,19 @@ test:
 run-server:
 	@go run main.go server
 
+run-mcp:
+	@go run main.go mcp
+
 build: 
 	@echo "Building server..."
 	@mkdir -p bin
 	@CGO_ENABLED=0 go build -a -installsuffix cgo -o bin/server .
 
+install-bin:
+	@echo "Installing binary to GOPATH/bin..."
+	@go install ./...
+
 docker-build:
 	@echo "Building Docker image..."
 	@docker build -t  .
+

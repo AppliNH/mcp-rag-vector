@@ -21,14 +21,18 @@ var (
 	Encoder = goahttp.ResponseEncoder
 )
 
-func ServeHTTP(mux goahttp.Muxer, ctx context.Context, cfg config.Config, wg *sync.WaitGroup, errc chan error) {
+// ServeHTTP starts the HTTP server using the provided handler.
+//
+// Previously this accepted a goa Muxer; to allow mounting external handlers
+// (for example an MCP HTTP handler) we accept a generic http.Handler here.
+func ServeHTTP(rootHandler http.Handler, ctx context.Context, cfg config.Config, wg *sync.WaitGroup, errc chan error) {
 
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
 		Level: cfg.LogLevel,
 	}))
 
 	// Middleware
-	handler := sloghttp.Recovery(mux)
+	handler := sloghttp.Recovery(rootHandler)
 	handler = sloghttp.New(logger)(handler)
 
 	// Start HTTP server using default configuration, change the code to

@@ -5,7 +5,7 @@ info:
     version: "1.0"
 servers:
     - url: http://localhost:80
-      description: MCP server to serve as a RAG pipeline by allowing an LLM to write and read in a vector DB. server
+      description: MCP server to serve as a RAG pipeline by allowing an LLM to write and read in a vector DB.
 paths:
     /checks/health:
         get:

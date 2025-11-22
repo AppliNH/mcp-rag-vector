@@ -12,7 +12,6 @@ import (
 	"net/http"
 
 	health "github.com/applinh/mcp-rag-vector/gen/health"
-
 	goahttp "goa.design/goa/v3/http"
 )
 

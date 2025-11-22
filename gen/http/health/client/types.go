@@ -9,7 +9,6 @@ package client
 
 import (
 	health "github.com/applinh/mcp-rag-vector/gen/health"
-
 	goa "goa.design/goa/v3/pkg"
 )
 
