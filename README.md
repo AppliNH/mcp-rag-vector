@@ -50,3 +50,29 @@ curl -i -X POST "http://localhost:3000/mcp/message?sessionId=<SESSION_ID>" \
     
   }'
 ```
+
+## Local usage with ollama
+
+1. Install ollama and run `ollama serve`
+
+2. Start the stack
+
+```bash
+docker compose up -d --build
+```
+
+3. Wait for the model to be downloaded (2 GB)
+
+4. Query the API
+
+```bash
+curl -X POST http://localhost:8000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "llama3.2:3b",
+    "messages": [
+      { "role": "user", "content": "Use the greeting tool to greet me. My name is Thomas." }
+    ],
+    "stream": false
+  }'
+```

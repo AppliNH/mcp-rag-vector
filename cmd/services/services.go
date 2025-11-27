@@ -30,7 +30,7 @@ var defaultFormat = func(ctx context.Context, err error) goahttp.Statuser {
 }
 
 func MountHealthService(ctx context.Context, mux goahttp.Muxer, cfg config.Config) {
-	slogger := defaultSLoggerSettings("greeting", cfg.LogLevel)
+	slogger := defaultSLoggerSettings("health", cfg.LogLevel)
 	loggerInstance := logger.NewLogger(slogger)
 	healthSvc := healthapi.NewHealthService(loggerInstance)
 	heathEndpoints := health.NewEndpoints(healthSvc)

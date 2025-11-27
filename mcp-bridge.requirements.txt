@@ -1,0 +1,2 @@
+ollama-mcp-bridge==0.7.0
+mcp-proxy==0.10.0

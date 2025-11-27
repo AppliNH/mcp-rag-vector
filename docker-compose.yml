@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  ollama-mcp-bridge:
+    build:
+      context: .
+      dockerfile: mcp-bridge.Dockerfile
+    working_dir: /app
+    volumes:
+      - ./mcp-config.json:/app/mcp-config.json
+    environment:
+      - PYTHONUNBUFFERED=1
+    # Installs the bridge and runs it, connecting to the ollama service
+    # Installs the bridge and runs it, connecting to the ollama service
+    command: >
+      sh -c "ollama-mcp-bridge --ollama-url http://host.docker.internal:11434 --host 0.0.0.0"
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      model-puller:
+        condition: service_completed_successfully
+      mcp-rag-vector:
+        condition: service_healthy
+    restart: always
+
+  # Helper service to pull the all-minilm model automatically on startup
+  model-puller:
+    image: curlimages/curl
+    command: >
+      sh -c "echo 'Pulling all-minilm embedding model...';
+             curl -X POST http://host.docker.internal:11434/api/pull -d '{\"name\": \"all-minilm\"}';
+             curl -X POST http://host.docker.internal:11434/api/pull -d '{\"name\": \"glm4:latest\"}';
+             echo 'Model pull request sent.'"
+  
+  mcp-rag-vector:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    command: ./server server
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/checks/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    
+    restart: always
+
+volumes:
+  ollama_data:

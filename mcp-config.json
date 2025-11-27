@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "mcp-rag-vector": {
+      "command": "mcp-proxy",
+      "args": [
+        "--transport",
+        "streamablehttp",
+        "http://mcp-rag-vector:3000/mcp"
+      ]
+    }
+  }
+}

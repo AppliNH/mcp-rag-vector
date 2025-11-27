@@ -22,7 +22,7 @@ RUN make build
 FROM alpine:3.19
 
 # Install ca-certificates for HTTPS requests
-RUN apk --no-cache add ca-certificates
+RUN apk --no-cache add ca-certificates curl
 
 # Create a non-root user
 RUN adduser -D -s /bin/sh appuser

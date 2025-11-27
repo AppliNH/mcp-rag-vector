@@ -29,9 +29,8 @@ var serverCmd = &cobra.Command{
 		mcpSrv := mcpInit(ctx, cfg)
 
 		// Use the MCP HTTP handler from mcp-go
-		// Mount the SSE server under /mcp so endpoints become
-		// /mcp/sse and /mcp/message
-		mcpHandler := server.NewSSEServer(mcpSrv, server.WithStaticBasePath("/mcp"))
+		// Mount the Streamable HTTP server under /mcp
+		mcpHandler := server.NewStreamableHTTPServer(mcpSrv, server.WithEndpointPath("/mcp"))
 
 		// Mount MCP handler under /mcp and combine with existing goa mux
 		finalHandler := infrahttp.CombineHandlers(mcpHandler, mux)
