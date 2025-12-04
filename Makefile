@@ -65,7 +65,6 @@ http-call-mcp:
 	curl -X POST http://localhost:3000/mcp \
 		-H "Content-Type: application/json" \
 		-H "$$SESSION_ID" \
-		-H "Mcp-Protocol-Version: 2025-06-18" \
 		-d '{ \
 			"jsonrpc": "2.0", \
 			"id": "0", \
