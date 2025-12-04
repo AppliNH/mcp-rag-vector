@@ -9,9 +9,12 @@ services:
     volumes:
       - ./mcp-config.json:/app/mcp-config.json
     environment:
-      - PYTHONUNBUFFERED=1
-    # Installs the bridge and runs it, connecting to the ollama service
-    # Installs the bridge and runs it, connecting to the ollama service
+      PYTHONUNBUFFERED: 1
+      SYSTEM_PROMPT: >
+        You are a helpful and concise assistant with access to external tools.
+        The tool schemas are defined for you.
+        You should use these tools proactively whenever they can help answer a user's question.
+        When a tool returns information, use it to formulate a clear, human-readable answer for the user.
     command: >
       sh -c "ollama-mcp-bridge --ollama-url http://host.docker.internal:11434 --host 0.0.0.0"
     ports:

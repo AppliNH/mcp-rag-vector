@@ -53,3 +53,25 @@ install-bin:
 docker-build:
 	@echo "Building Docker image..."
 	@docker build -t  .
+
+http-call-mcp:
+	@SESSION_ID=$$(curl -s -i -X POST "http://localhost:3000/mcp" \
+		-H "Content-Type: application/json" \
+		-d '{ \
+			"jsonrpc": "2.0", \
+			"id": "0", \
+			"method": "initialize" \
+		}' | grep "mcp-session-" | tr -d '\r'); \
+	curl -X POST http://localhost:3000/mcp \
+		-H "Content-Type: application/json" \
+		-H "$$SESSION_ID" \
+		-H "Mcp-Protocol-Version: 2025-06-18" \
+		-d '{ \
+			"jsonrpc": "2.0", \
+			"id": "0", \
+			"method": "tools/call", \
+			"params": { \
+				"name": "greet", \
+				"arguments":  { "name": "Thomas" } \
+			} \
+		}'

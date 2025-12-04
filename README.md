@@ -20,37 +20,6 @@ make install-bin
 }
 ```
 
-## Test MCP via HTTP with SSE
-
-1. In one terminal, start the server:
-```bash
-curl -N -H "Accept: text/event-stream" http://localhost:3000/mcp/sse
-```
-
-2. Copy the `sessionId` from the response:
-
-```
-event: endpoint
-data: /mcp/message?sessionId=XXX
-```
-
-3. In another terminal, invoke the greeting tool:
-```bash
-curl -i -X POST "http://localhost:3000/mcp/message?sessionId=<SESSION_ID>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jsonrpc": "2.0",
-    "id": "0",
-    
-      "method": "tools/call",
-      "params": {
-        "name": "greet",
-        "arguments": { "name": "Alice" }
-      }
-    
-  }'
-```
-
 ## Local usage with ollama
 
 1. Install ollama and run `ollama serve`
@@ -71,8 +40,16 @@ curl -X POST http://localhost:8000/api/chat \
   -d '{
     "model": "llama3.2:3b",
     "messages": [
-      { "role": "user", "content": "Use the greeting tool to greet me. My name is Thomas." }
+      { "role": "user", "content": "Use the greet tool with my name thomas, return what it says" }
     ],
     "stream": false
   }'
 ```
+
+## Query the MCP via cURL
+
+1. Start the API
+
+`docker-commpose up` or `make run-server`
+
+2. Use `make http-call-mcp`
