@@ -52,7 +52,7 @@ install-bin:
 
 docker-build:
 	@echo "Building Docker image..."
-	@docker build -t  .
+	@docker build -t applinh/mcp-rag-vector .
 
 http-call-mcp:
 	@SESSION_ID=$$(curl -s -i -X POST "http://localhost:3000/mcp" \

@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v0.2.0
+_commit: v0.2.1
 _src_path: gh:applinh/goa-boilerplate
 api_description: A simple API for MCP server to serve as a RAG pipeline by allowing
     an LLM to write and read in a vector DB.
