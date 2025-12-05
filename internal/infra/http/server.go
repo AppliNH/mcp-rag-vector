@@ -33,7 +33,17 @@ func ServeHTTP(rootHandler http.Handler, ctx context.Context, cfg config.Config,
 
 	// Middleware
 	handler := sloghttp.Recovery(rootHandler)
-	handler = sloghttp.New(logger)(handler)
+
+	// Configure logging with filter to exclude health checks
+	config := sloghttp.Config{
+		DefaultLevel: cfg.LogLevel,
+
+		Filters: []sloghttp.Filter{
+			sloghttp.IgnorePath("/checks/health"),
+		},
+	}
+
+	handler = sloghttp.NewWithConfig(logger, config)(handler)
 
 	// Start HTTP server using default configuration, change the code to
 	// configure the server as required by your service.

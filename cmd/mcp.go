@@ -32,6 +32,7 @@ var mcpCmd = &cobra.Command{
 func mcpInit(ctx context.Context, cfg config.Config) *server.MCPServer {
 	mcpSrv := server.NewMCPServer("MCP", "1.0.0")
 	services.MountGreetingMCPService(ctx, mcpSrv, cfg)
+	services.MountKnowledgeBaseMCPService(ctx, mcpSrv, cfg)
 
 	return mcpSrv
 }

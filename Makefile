@@ -2,7 +2,7 @@ download-deps:
 	go mod download
 
 install-goa:
-	go install goa.design/goa/v3/cmd/goa@latest
+	go install goa.design/goa/v3/cmd/goa@v3.22.2
 
 install-mockery:
 	go install github.com/vektra/mockery/v2@latest

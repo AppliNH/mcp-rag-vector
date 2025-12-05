@@ -7,9 +7,12 @@ import (
 	"github.com/applinh/mcp-rag-vector/gen/health"
 	greetingapi "github.com/applinh/mcp-rag-vector/internal/app/greeting"
 	healthapi "github.com/applinh/mcp-rag-vector/internal/app/health"
+	knowledgebaseapi "github.com/applinh/mcp-rag-vector/internal/app/knowledgebase"
 	"github.com/applinh/mcp-rag-vector/internal/infra/http"
 	"github.com/applinh/mcp-rag-vector/internal/infra/logger"
 	mcphandlers "github.com/applinh/mcp-rag-vector/internal/infra/mcp_handlers"
+	"github.com/applinh/mcp-rag-vector/internal/infra/ollama"
+	qdrantinfra "github.com/applinh/mcp-rag-vector/internal/infra/qdrant"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 
@@ -48,4 +51,26 @@ func MountGreetingMCPService(ctx context.Context, mcpSrv *server.MCPServer, cfg 
 		mcp.WithString("name", mcp.Required(), mcp.Description("Name to greet")),
 	)
 	mcpSrv.AddTool(greetingTool, mcphandlers.MCPGreetingHandler(greetingSvc))
+}
+
+func MountKnowledgeBaseMCPService(ctx context.Context, mcpSrv *server.MCPServer, cfg config.Config) {
+	slogger := defaultSLoggerSettings("knowledge-base", cfg.LogLevel)
+	loggerInstance := logger.NewLogger(slogger)
+
+	// Infra
+	embedder := ollama.NewRepository(cfg.Ollama.Host, cfg.Ollama.EmbeddingModel)
+	qdrantRepo := qdrantinfra.NewRepository(cfg.Qdrant.Host, embedder)
+
+	// Service
+	qdrantSvc := knowledgebaseapi.NewService(loggerInstance, qdrantRepo)
+
+	// Tool
+	qdrantTool := mcp.NewTool("qdrant_upsert",
+		mcp.WithDescription("Upsert text to Qdrant"),
+		mcp.WithString("collection", mcp.Required(), mcp.Description("Collection name")),
+		mcp.WithString("content", mcp.Required(), mcp.Description("Content to store")),
+	)
+
+	// Handler
+	mcpSrv.AddTool(qdrantTool, mcphandlers.MCPKnowledgeBaseHandler(qdrantSvc))
 }
