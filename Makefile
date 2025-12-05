@@ -12,7 +12,8 @@ generate-code-design:
 
 
 install-lint: 
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	@echo "Installing golangci-lint..."
+	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin latest
 
 install-dev-tools: install-goa install-mockery install-lint
 
