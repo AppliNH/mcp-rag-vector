@@ -2,7 +2,7 @@ download-deps:
 	go mod download
 
 install-goa:
-	go install goa.design/goa/v3/cmd/goa@latest
+	go install goa.design/goa/v3/cmd/goa@v3.22.2
 
 install-mockery:
 	go install github.com/vektra/mockery/v2@latest
@@ -12,7 +12,8 @@ generate-code-design:
 
 
 install-lint: 
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	@echo "Installing golangci-lint..."
+	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin latest
 
 install-dev-tools: install-goa install-mockery install-lint
 
@@ -52,7 +53,7 @@ install-bin:
 
 docker-build:
 	@echo "Building Docker image..."
-	@docker build -t  .
+	@docker build -t applinh/mcp-rag-vector .
 
 http-call-mcp:
 	@SESSION_ID=$$(curl -s -i -X POST "http://localhost:3000/mcp" \

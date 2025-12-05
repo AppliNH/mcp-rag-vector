@@ -47,6 +47,10 @@ services:
     ports:
       - "3000:3000"
     command: ./server server
+    environment:
+      OLLAMA_HOST: http://host.docker.internal:11434
+      OLLAMA_EMBEDDING_MODEL: all-minilm
+      QDRANT_HOST: qdrant:6334
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/checks/health"]
       interval: 10s
@@ -55,5 +59,15 @@ services:
     
     restart: always
 
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    restart: always
+
 volumes:
   ollama_data:
+  qdrant_data:

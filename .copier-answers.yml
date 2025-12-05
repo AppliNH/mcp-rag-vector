@@ -1,0 +1,9 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v0.2.2
+_src_path: gh:applinh/goa-boilerplate
+api_description: A simple API for MCP server to serve as a RAG pipeline by allowing
+    an LLM to write and read in a vector DB.
+api_name: mcp-rag-vector
+docker_image_name: applinh/mcp-rag-vector
+go_version: '1.25'
+module_name: github.com/applinh/mcp-rag-vector
